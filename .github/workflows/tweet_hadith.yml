@@ -1,0 +1,43 @@
+
+name: TweetHadith
+
+on:
+  schedule:
+    - cron: "0 */3 * * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      
+      - name: Install Requirements
+        run: pip install -r requirements.txt
+
+      - name: Run python script
+        run: |
+          python main.py
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+          API_SECRET: ${{ secrets.API_SECRET }}
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+          FB_PAGE_TOKEN: ${{ secrets.FB_PAGE_TOKEN }}
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+
+      - name: setup git config
+        run: |
+          git config user.name "ananto-bot"
+          git config user.email "ananto-bot@bot.ai"
+  
+      - name: commit changes
+        run: |
+          chmod +x ./scripts/commit.sh
+          ./scripts/commit.sh
