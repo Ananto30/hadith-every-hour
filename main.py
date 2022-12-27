@@ -10,13 +10,15 @@ from tweepy.errors import TweepyException
 def tweet_hadith():
     collection, book, hadith_no = get_hadith_track()
 
-    hadith_source = "http://askhadith.herokuapp.com"
-    full_hadith_source = "https://askhadith.herokuapp.com"
-    hadith_link = f"{full_hadith_source}/b/{collection}/{book}/{hadith_no}"
+    hadith_source = "https://ask-hadith.vercel.app/api/book"
+    full_hadith_source = "https://askhadith.com/book"
+    hadith_link = f"{full_hadith_source}?collection_id={collection}&book={book}&ref_no={hadith_no}"
 
-    resp = requests.get(f"{hadith_source}/api/{collection}/{book}/{hadith_no}")
+    resp = requests.get(f"{hadith_source}?collection_id={collection}&book={book}&ref_no={hadith_no}")
     if resp.json():
-        hadith = Hadith(**resp.json())
+        data = resp.json()
+        data.pop('_id')
+        hadith = Hadith(**data)
         hadith.hadith_link = hadith_link
         try:
             tweet(hadith)
