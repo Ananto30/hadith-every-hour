@@ -1,11 +1,13 @@
 import os
 
 import requests
+import urllib.parse
 
-from model import Hadith
+from src.model import Hadith
 
 
-def format_post(hadith: Hadith):
+def format_post(hadith: Hadith) -> str:
+    link = urllib.parse.quote_plus(hadith.hadith_link)
     return "\n".join(
         [
             f"{hadith.collection} (Book {hadith.book_no}, Hadith {hadith.book_ref_no} [Reference {hadith.hadith_no}])",
@@ -15,12 +17,12 @@ def format_post(hadith: Hadith):
             else "",
             f"\n{hadith.narrator_en}",
             hadith.body_en,
-            f"\n\nLink: {hadith.hadith_link}",
+            f"\n\nLink: {link}",
         ]
     )
 
 
-def post_on_page(hadith: Hadith):
+def post_on_facebook_page(hadith: Hadith):
     access_token = os.getenv("FB_PAGE_TOKEN")
     page_id = os.getenv("FB_PAGE_ID")
     msg = format_post(hadith)
@@ -28,4 +30,5 @@ def post_on_page(hadith: Hadith):
     resp = requests.post(
         f"https://graph.facebook.com/{page_id}/feed?message={msg}&access_token={access_token}"
     )
-    print(resp.content)
+
+    print(f"Posted on FB {resp.content}")

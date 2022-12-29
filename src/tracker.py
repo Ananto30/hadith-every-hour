@@ -3,7 +3,7 @@ from typing import Tuple
 
 
 def get_hadith_track() -> Tuple[str, int, int]:
-    with open("hadith_track.json", "r") as json_file:
+    with open("resources/hadith_track.json", "r") as json_file:
         data = json.load(json_file)
         return (
             data.get("collection"),
@@ -14,7 +14,7 @@ def get_hadith_track() -> Tuple[str, int, int]:
 
 def update_hadith_track(collection, book, hadith):
     # TODO: need to make dynamic
-    with open("bukhari_books.json", "r") as json_file:
+    with open("resources/bukhari_books.json", "r") as json_file:
         data = json.load(json_file)
 
     if data.get(str(book)) > hadith:
@@ -23,7 +23,7 @@ def update_hadith_track(collection, book, hadith):
         hadith = 1
         book += 1
 
-    with open("hadith_track.json", "w") as json_file:
+    with open("resources/hadith_track.json", "w") as json_file:
         json.dump(
             {"collection": collection, "book": book, "hadith": hadith},
             json_file,

@@ -3,7 +3,7 @@ from typing import List
 
 import tweepy
 
-from model import Hadith
+from src.model import Hadith
 
 tweet_char_limit = 260
 total_tweet_thread_char_limit = 4 * 260  # should review again
@@ -80,3 +80,5 @@ def tweet(hadith: Hadith):
         status = api.update_status(
             f"@HadithEveryHour {chunks[i]}", in_reply_to_status_id=status.id
         )
+
+    print(f"Tweeted: {status.text}")
