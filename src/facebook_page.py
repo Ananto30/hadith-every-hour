@@ -10,13 +10,13 @@ def format_post(hadith: Hadith) -> str:
     link = urllib.parse.quote_plus(hadith.hadith_link)
     return "\n".join(
         [
-            f"{hadith.collection} (Book {hadith.book_no}, Hadith {hadith.book_ref_no} [Reference {hadith.hadith_no}])",
+            f"{hadith.narrator_en}",
+            hadith.body_en,
+            f"\n{hadith.collection} (Book {hadith.book_no}, Hadith {hadith.book_ref_no} [Reference {hadith.hadith_no}])",
             f"Book: {hadith.book_en}",
             f"Chapter: ({hadith.chapter_no}) {hadith.chapter_en}"
             if hadith.chapter_en
             else "",
-            f"\n{hadith.narrator_en}",
-            hadith.body_en,
             f"\n\nLink: {link}",
         ]
     )
