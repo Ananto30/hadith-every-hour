@@ -18,7 +18,7 @@ def query_hadith(collection: str, book: int, hadith_no: int) -> Optional[Hadith]
 
     if resp.json():
         data = resp.json()
-        data.pop("_id")
+        # data.pop("_id")
         hadith = Hadith(**data)
         hadith.hadith_link = hadith_link
 
