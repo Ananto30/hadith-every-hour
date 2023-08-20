@@ -1,7 +1,7 @@
 <p align="center">
  <h2 align="center">Hadith Every Hour</h2>
  <p align="center">📖 A bot that posts a Hadith every hour on Twitter & Facebook</p>
- <p align="center"><i>(Every 3 hours for now to avoid spamming)</i></p>
+ <p align="center"><i>(Every 6 hours for now to avoid spamming)</i></p>
 </p>
 <p align="center">
   Follow on Twitter <a href="https://twitter.com/HadithEveryHour">@HadithEveryHour</a> & Facebook <a href="https://www.facebook.com/HadithEveryHour">@HadithEveryHour</a>
