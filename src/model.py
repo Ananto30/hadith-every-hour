@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 
 @dataclass
@@ -14,7 +15,7 @@ class Hadith:
     hadith_grade: str
     hadith_no: str
     narrator_en: str
-    highlights: dict = None
-    hadith_link: str = None
-    base64: str = None
-    score: float = None
+    highlights: Optional[dict] = None
+    hadith_link: Optional[str] = None
+    base64: Optional[str] = None
+    score: Optional[float] = None
