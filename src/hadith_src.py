@@ -1,4 +1,5 @@
 from typing import Optional
+
 import requests
 
 from src.model import Hadith
@@ -13,7 +14,8 @@ def query_hadith(collection: str, book: int, hadith_no: int) -> Optional[Hadith]
     print(f"Querying {hadith_link}")
 
     resp = requests.get(
-        f"{hadith_source}?collection_id={collection}&book={book}&ref_no={hadith_no}"
+        f"{hadith_source}?collection_id={collection}&book={book}&ref_no={hadith_no}",
+        timeout=10,
     )
 
     if resp.json():
@@ -25,5 +27,5 @@ def query_hadith(collection: str, book: int, hadith_no: int) -> Optional[Hadith]
         print(f"Found hadith: {hadith}")
 
         return hadith
-    
-    print(f"Could not find hadith: {resp.content}")
+
+    print(f"Could not find hadith: {resp.content.decode('utf-8')}")

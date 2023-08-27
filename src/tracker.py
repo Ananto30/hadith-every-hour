@@ -25,7 +25,11 @@ def update_hadith_track(collection, book, hadith):
 
     with open("resources/hadith_track.json", "w") as json_file:
         json.dump(
-            {"collection": collection, "book": book, "hadith": hadith},
+            {
+                "collection": collection,
+                "book": book,
+                "hadith": hadith,
+            },
             json_file,
             indent=2,
         )

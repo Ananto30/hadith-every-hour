@@ -13,7 +13,7 @@ def make_tweet(hadith: Hadith):
     """
     Make only one Tweet body.
     """
-    full_hadith = "\n".join([hadith.narrator, hadith.content, hadith.hadith_number])
+    full_hadith = "\n".join([hadith.narrator_en, hadith.body_en, hadith.hadith_no])
     if len(full_hadith) > tweet_char_limit:
         link = f"\nFull hadith: {hadith.hadith_link}"
         full_hadith = full_hadith[: (tweet_char_limit - (len(link) + 3))] + "..." + link
