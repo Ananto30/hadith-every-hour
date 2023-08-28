@@ -4,7 +4,7 @@ from typing import List
 import tweepy
 
 from src.model import Hadith
-from utils import ensure_env_var
+from src.utils import ensure_env_var
 
 tweet_char_limit = 260
 total_tweet_thread_char_limit = 4 * 260  # should review again
