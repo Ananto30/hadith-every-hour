@@ -3,7 +3,7 @@ import urllib.parse
 import requests
 
 from src.model import Hadith
-from utils import decrypt, encrypt, ensure_env_var
+from src.utils import decrypt, encrypt, ensure_env_var
 
 
 def format_post(hadith: Hadith) -> str:
