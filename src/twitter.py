@@ -4,6 +4,7 @@ from typing import List
 import tweepy
 
 from src.model import Hadith
+from utils import ensure_env_var
 
 tweet_char_limit = 260
 total_tweet_thread_char_limit = 4 * 260  # should review again
@@ -65,12 +66,12 @@ def make_tweet_thread(hadith: Hadith) -> List[str]:
 
 def tweet(hadith: Hadith):
     auth = tweepy.OAuthHandler(
-        os.getenv("API_KEY"),
-        os.getenv("API_SECRET"),
+        ensure_env_var("API_KEY"),
+        ensure_env_var("API_SECRET"),
     )
     auth.set_access_token(
-        os.getenv("ACCESS_TOKEN"),
-        os.getenv("ACCESS_TOKEN_SECRET"),
+        ensure_env_var("ACCESS_TOKEN"),
+        ensure_env_var("ACCESS_TOKEN_SECRET"),
     )
     api = tweepy.API(auth)
 

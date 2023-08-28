@@ -1,10 +1,9 @@
-import os
 import urllib.parse
 
 import requests
-from cryptography.fernet import Fernet
 
 from src.model import Hadith
+from utils import decrypt, encrypt, ensure_env_var
 
 
 def format_post(hadith: Hadith) -> str:
@@ -25,7 +24,7 @@ def format_post(hadith: Hadith) -> str:
 
 def post_on_facebook_page(hadith: Hadith):
     access_token = get_fb_token_from_file()
-    page_id = os.getenv("FB_PAGE_ID")
+    page_id = ensure_env_var("FB_PAGE_ID")
     msg = format_post(hadith)
 
     resp = requests.post(
@@ -38,8 +37,8 @@ def post_on_facebook_page(hadith: Hadith):
 
 
 def renew_fb_page_token(old_token):
-    app_id = os.getenv("FB_APP_ID")
-    app_secret = os.getenv("FB_APP_SECRET")
+    app_id = ensure_env_var("FB_APP_ID")
+    app_secret = ensure_env_var("FB_APP_SECRET")
 
     resp = requests.get(
         f"https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id={app_id}&client_secret={app_secret}&fb_exchange_token={old_token}",
@@ -61,25 +60,11 @@ def update_token_file(new_token) -> None:
         token_file.write(encrypt_with_secret_key(new_token))
 
 
-def encrypt(key: str, value: str) -> str:
-    fernet = Fernet(bytes(key, "utf-8"))
-    return fernet.encrypt(value.encode("utf-8")).decode("utf-8")
-
-
-def decrypt(key: str, value: str) -> str:
-    fernet = Fernet(bytes(key, "utf-8"))
-    return fernet.decrypt(value.encode("utf-8")).decode("utf-8")
-
-
 def encrypt_with_secret_key(value: str) -> str:
-    key = os.getenv("TOKEN_ENCRYPTION_KEY")
-    if not key:
-        raise ValueError("TOKEN_ENCRYPTION_KEY is not set")
+    key = ensure_env_var("TOKEN_ENCRYPTION_KEY")
     return encrypt(key, value)
 
 
 def decrypt_with_secret_key(value: str) -> str:
-    key = os.getenv("TOKEN_ENCRYPTION_KEY")
-    if not key:
-        raise ValueError("TOKEN_ENCRYPTION_KEY is not set")
+    key = ensure_env_var("TOKEN_ENCRYPTION_KEY")
     return decrypt(key, value)
