@@ -18,7 +18,7 @@ It's really simple. GitHub action is written in <a href="/.github/workflows/twee
 ```
 on:
   schedule:
-    - cron: "0 */3 * * *"
+    - cron: "0 */6 * * *"
 ```
 And the rest of the process is self explanatory.
 
