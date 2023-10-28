@@ -23,7 +23,8 @@ def format_post(hadith: Hadith) -> str:
 
 
 def post_on_facebook_page(hadith: Hadith):
-    access_token = get_fb_token_from_file()
+    # access_token = get_fb_token_from_file()
+    access_token = ensure_env_var("FB_PAGE_TOKEN")
     page_id = ensure_env_var("FB_PAGE_ID")
     msg = format_post(hadith)
 
@@ -33,7 +34,7 @@ def post_on_facebook_page(hadith: Hadith):
     )
     print(f"Posted on FB {resp.content.decode('utf-8')}")
 
-    renew_fb_page_token(access_token)
+    # renew_fb_page_token(access_token)
 
 
 def renew_fb_page_token(old_token):
