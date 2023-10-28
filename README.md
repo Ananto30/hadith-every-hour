@@ -7,7 +7,10 @@
   Follow on Twitter <a href="https://twitter.com/HadithEveryHour">@HadithEveryHour</a> & Facebook <a href="https://www.facebook.com/HadithEveryHour">@HadithEveryHour</a>
 </p>
 
+
 ### Status
+[![TweetHadith](https://github.com/Ananto30/hadith-every-hour/actions/workflows/tweet_hadith.yml/badge.svg)](https://github.com/Ananto30/hadith-every-hour/actions/workflows/tweet_hadith.yml)
+
 Currently posting the Hadiths from Sahih al-Bukhari in serial.
 
 ### Concept
