@@ -43,8 +43,6 @@ def update_hadith_track(tracker_file):
     with open("resources/bukhari_books.json", "r") as json_file:
         data = json.load(json_file)
 
-    print(f"Updating tracker: {data}")
-    print(f"Updating tracker: {collection}, {book}, {hadith}")
     if data.get(str(book)) > hadith:
         hadith += 1
     else:
