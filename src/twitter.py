@@ -1,23 +1,27 @@
-import os
+import time
 from typing import List
 
 import tweepy
 
+from src.config import Twitter
 from src.model import Hadith
 from src.utils import ensure_env_var
-
-tweet_char_limit = 260
-total_tweet_thread_char_limit = 4 * 260  # should review again
 
 
 def make_tweet(hadith: Hadith):
     """
     Make only one Tweet body.
     """
-    full_hadith = "\n".join([hadith.narrator_en, hadith.body_en, hadith.hadith_no])
-    if len(full_hadith) > tweet_char_limit:
+    full_hadith = "\n".join(
+        [hadith.narrator_en, hadith.body_en, hadith.hadith_no]
+    )
+    if len(full_hadith) > Twitter.char_limit:
         link = f"\nFull hadith: {hadith.hadith_link}"
-        full_hadith = full_hadith[: (tweet_char_limit - (len(link) + 3))] + "..." + link
+        full_hadith = (
+            full_hadith[: (Twitter.char_limit - (len(link) + 3))]
+            + "..."
+            + link
+        )
 
     return full_hadith
 
@@ -44,8 +48,8 @@ def make_tweet_thread(hadith: Hadith) -> List[str]:
     )
     i, j = 0, 0
     chunks = []
-    while i < len(full_hadith) and i < total_tweet_thread_char_limit:
-        j += tweet_char_limit
+    while i < len(full_hadith) and i < Twitter.total_thread_char_limit:
+        j += Twitter.char_limit
         if j < len(full_hadith) and full_hadith[j] != " ":
             j = get_prev_word_end_index(j, full_hadith)
         chunks.append(full_hadith[i:j])
@@ -53,10 +57,10 @@ def make_tweet_thread(hadith: Hadith) -> List[str]:
 
     link = (
         f"\n.........This is a long Hadith, please continue reading here: {hadith.hadith_link}"
-        if i > total_tweet_thread_char_limit
+        if i > Twitter.total_thread_char_limit
         else f"\nFor convenient reading: {hadith.hadith_link}"
     )
-    if len(chunks[-1]) < (tweet_char_limit - len(link)):
+    if len(chunks[-1]) < (Twitter.char_limit - len(link)):
         chunks[-1] = chunks[-1] + link
     else:
         chunks.append(link)
@@ -65,21 +69,24 @@ def make_tweet_thread(hadith: Hadith) -> List[str]:
 
 
 def tweet(hadith: Hadith):
-    auth = tweepy.OAuthHandler(
-        ensure_env_var("API_KEY"),
-        ensure_env_var("API_SECRET"),
+    client = tweepy.Client(
+        consumer_key=ensure_env_var(Twitter.consumer_key),
+        consumer_secret=ensure_env_var(Twitter.consumer_secret),
+        access_token=ensure_env_var(Twitter.access_token),
+        access_token_secret=ensure_env_var(Twitter.access_token_secret),
     )
-    auth.set_access_token(
-        ensure_env_var("ACCESS_TOKEN"),
-        ensure_env_var("ACCESS_TOKEN_SECRET"),
-    )
-    api = tweepy.API(auth)
 
     chunks = make_tweet_thread(hadith)
-    status = api.update_status(chunks[0])
-    for i in range(1, len(chunks)):
-        status = api.update_status(
-            f"@HadithEveryHour {chunks[i]}", in_reply_to_status_id=status.id
-        )
+    resp = client.create_tweet(text=chunks[0])
+    status_id = resp.data.get("id")
 
-    print(f"Tweeted: {status.text}")
+    comments = []
+    for i in range(1, len(chunks)):
+        res = client.create_tweet(
+            text=f"@HadithEveryHour {chunks[i]}",
+            in_reply_to_tweet_id=status_id,
+        )
+        comments.append(res.data)
+        time.sleep(1)
+
+    print(f"Tweeted: status={resp}\n\n comments={comments}")

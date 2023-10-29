@@ -1,5 +1,5 @@
-from dataclasses import dataclass
-from typing import Optional
+from dataclasses import asdict, dataclass
+from typing import Dict, Optional
 
 
 @dataclass
@@ -15,7 +15,10 @@ class Hadith:
     hadith_grade: str
     hadith_no: str
     narrator_en: str
-    highlights: Optional[dict] = None
+    highlights: Optional[Dict] = None
     hadith_link: Optional[str] = None
     base64: Optional[str] = None
     score: Optional[float] = None
+
+    def dict(self):
+        return asdict(self)

@@ -1,5 +1,5 @@
 
-name: TweetHadith
+name: Post to Facebook
 
 on:
   schedule:
@@ -26,7 +26,7 @@ jobs:
 
       - name: Run python script
         run: |
-          python main.py
+          make fb
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}

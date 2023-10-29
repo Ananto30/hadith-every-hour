@@ -1,0 +1,49 @@
+
+name: Tweet
+
+on:
+  schedule:
+    - cron: "1 */6 * * *"
+  workflow_dispatch:
+    
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+      
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+          cache: pip
+      
+      - name: Install Requirements
+        run: pip install -r requirements.txt
+
+      - name: Run python script
+        run: |
+          make tweet
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+          API_KEY: ${{ secrets.API_KEY }}
+          API_SECRET: ${{ secrets.API_SECRET }}
+          FB_APP_ID: ${{ secrets.FB_APP_ID }}
+          FB_APP_SECRET: ${{ secrets.FB_APP_SECRET }}
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          FB_PAGE_TOKEN: ${{ secrets.FB_PAGE_TOKEN }}
+          TOKEN_ENCRYPTION_KEY: ${{ secrets.TOKEN_ENCRYPTION_KEY }}
+
+      - name: setup git config
+        run: |
+          git config user.name "ananto-bot"
+          git config user.email "ananto-bot@bot.ai"
+  
+      - name: commit changes
+        run: |
+          chmod +x ./scripts/commit.sh
+          ./scripts/commit.sh

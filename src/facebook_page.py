@@ -7,7 +7,11 @@ from src.utils import decrypt, encrypt, ensure_env_var
 
 
 def format_post(hadith: Hadith) -> str:
-    link = urllib.parse.quote_plus(hadith.hadith_link) if hadith.hadith_link else ""
+    link = (
+        urllib.parse.quote_plus(hadith.hadith_link)
+        if hadith.hadith_link
+        else ""
+    )
     return "\n".join(
         [
             f"{hadith.narrator_en}",
