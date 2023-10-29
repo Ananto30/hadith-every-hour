@@ -9,7 +9,8 @@
 
 
 ### Status
-[![TweetHadith](https://github.com/Ananto30/hadith-every-hour/actions/workflows/tweet_hadith.yml/badge.svg)](https://github.com/Ananto30/hadith-every-hour/actions/workflows/tweet_hadith.yml)
+[![Tweet](https://github.com/Ananto30/hadith-every-hour/actions/workflows/tweet.yml/badge.svg)](https://github.com/Ananto30/hadith-every-hour/actions/workflows/tweet.yml)
+[![Post to Facebook](https://github.com/Ananto30/hadith-every-hour/actions/workflows/post_to_facebook.yml/badge.svg)](https://github.com/Ananto30/hadith-every-hour/actions/workflows/post_to_facebook.yml)
 
 Currently posting the Hadiths from Sahih al-Bukhari in serial.
 
