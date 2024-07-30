@@ -36,6 +36,7 @@ def post_on_facebook_page(hadith: Hadith):
         f"https://graph.facebook.com/{page_id}/feed?message={msg}&access_token={access_token}",
         timeout=10,
     )
+    resp.raise_for_status()
     print(f"Posted on FB {resp.content.decode('utf-8')}")
 
     # renew_fb_page_token(access_token)

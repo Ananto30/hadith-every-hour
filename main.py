@@ -27,16 +27,14 @@ def tweet_or_post(platform):
     if platform == "tweet":
         hadith = get_hadith_for_twitter()
         if not hadith:
-            warnings.warn("No hadith found")
-            return
+            raise ValueError("No hadith found")
         tweet(hadith)
         update_tracker_for_twitter()
 
     if platform == "fb":
         hadith = get_hadith_for_facebook()
         if not hadith:
-            warnings.warn("No hadith found")
-            return
+            raise ValueError("No hadith found")
         post_on_facebook_page(hadith)
         update_tracker_for_facebook()
 
