@@ -1,5 +1,4 @@
 from pprint import pprint
-from typing import Optional
 
 import requests
 
@@ -12,7 +11,7 @@ def query_hadith(
     collection: str,
     book: int,
     hadith_no: int,
-) -> Optional[Hadith]:
+) -> Hadith | None:
     full_hadith_source = "https://askhadith.com/book"
     hadith_link = f"{full_hadith_source}?collection_id={collection}&book={book}&ref_no={hadith_no}"
 

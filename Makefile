@@ -35,3 +35,8 @@ tweet:
 fb:
 	@echo "Posting to Facebook..."
 	@python main.py fb
+
+.PHONY: refresh-fb-token
+refresh-fb-token:
+	@echo "Refreshing Facebook token..."
+	@python -m src.fb_token

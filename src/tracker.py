@@ -1,6 +1,5 @@
 import json
 from dataclasses import dataclass
-from typing import Tuple
 
 
 @dataclass
@@ -32,7 +31,7 @@ class Tracker:
             )
 
 
-def get_hadith_track(tracker_file) -> Tuple[str, int, int]:
+def get_hadith_track(tracker_file) -> tuple[str, int, int]:
     tracker = Tracker.from_file(tracker_file)
     return tracker.collection, tracker.book, tracker.hadith
 

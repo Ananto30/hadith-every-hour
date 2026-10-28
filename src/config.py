@@ -12,9 +12,3 @@ class Twitter:
 
 class Facebook:
     tracker_file = "resources/hadith_track_fb.json"
-
-    app_id = "FB_APP_ID"
-    app_secret = "FB_APP_SECRET"
-    page_id = "FB_PAGE_ID"
-    page_token = "FB_PAGE_TOKEN"
-    token_encryption_key = "TOKEN_ENCRYPTION_KEY"

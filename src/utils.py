@@ -16,10 +16,20 @@ def ensure_env_var(var_name: str) -> str:
     Raises:
         ValueError: If the environment variable is not set.
     """
-    var = os.getenv(var_name)
+    var = get_optional_env_var(var_name)
     if var is None:
         raise ValueError(f"Environment variable {var_name} is not set.")
     return var
+
+
+def get_optional_env_var(var_name: str) -> str | None:
+    """
+    Return an environment variable, treating an empty value as unset.
+
+    GitHub Actions expands an unset secret to an empty string, so checking
+    for a non-empty value avoids accidentally using a blank token.
+    """
+    return os.getenv(var_name) or None
 
 
 def encrypt(key: str, value: str) -> str:

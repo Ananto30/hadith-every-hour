@@ -5,7 +5,9 @@ on:
   schedule:
     - cron: "1 */6 * * *"
   workflow_dispatch:
-    
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -16,7 +18,7 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: setup python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: 3.11
           cache: pip
@@ -32,11 +34,6 @@ jobs:
           ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
           API_KEY: ${{ secrets.API_KEY }}
           API_SECRET: ${{ secrets.API_SECRET }}
-          FB_APP_ID: ${{ secrets.FB_APP_ID }}
-          FB_APP_SECRET: ${{ secrets.FB_APP_SECRET }}
-          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
-          FB_PAGE_TOKEN: ${{ secrets.FB_PAGE_TOKEN }}
-          TOKEN_ENCRYPTION_KEY: ${{ secrets.TOKEN_ENCRYPTION_KEY }}
 
       - name: setup git config
         run: |

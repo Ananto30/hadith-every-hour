@@ -1,5 +1,4 @@
 import time
-from typing import List
 
 import tweepy
 
@@ -32,7 +31,7 @@ def get_prev_word_end_index(i, full_hadith) -> int:
     return i
 
 
-def make_tweet_thread(hadith: Hadith) -> List[str]:
+def make_tweet_thread(hadith: Hadith) -> list[str]:
     """
     Make several Tweet bodies.
     First body can be the main Tweet and the followings are comments

@@ -1,5 +1,4 @@
 import sys
-import warnings
 from functools import partial
 
 from src.config import Facebook, Twitter

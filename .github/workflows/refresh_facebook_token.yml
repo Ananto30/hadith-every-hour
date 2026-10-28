@@ -1,0 +1,75 @@
+name: Refresh Facebook token
+
+on:
+  schedule:
+    # Daily at 04:23 UTC. Tokens are refreshed with 14 days to spare.
+    - cron: "23 4 * * *"
+  workflow_dispatch:
+    inputs:
+      force_bootstrap:
+        description: "Replace stored tokens using FB_USER_TOKEN"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: facebook-token-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install requirements
+        run: pip install -r requirements.txt
+
+      - name: Refresh token
+        run: python -m src.fb_token
+        env:
+          FB_APP_ID: ${{ secrets.FB_APP_ID }}
+          FB_APP_SECRET: ${{ secrets.FB_APP_SECRET }}
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          # FB_USER_TOKEN is only needed for the first run (bootstrap) and
+          # for recovery. After that the refreshed token is in the encrypted
+          # state file.
+          FB_USER_TOKEN: ${{ secrets.FB_USER_TOKEN }}
+          FB_PAGE_TOKEN: ${{ secrets.FB_PAGE_TOKEN }}
+          TOKEN_ENCRYPTION_KEY: ${{ secrets.TOKEN_ENCRYPTION_KEY }}
+          FB_FORCE_BOOTSTRAP: ${{ github.event.inputs.force_bootstrap || 'false' }}
+
+      - name: Commit refreshed token
+        run: |
+          git config user.name "ananto-bot"
+          git config user.email "ananto-bot@bot.ai"
+
+          git add resources/fb_token.enc
+          if git diff --cached --quiet; then
+            echo "No token changes to commit."
+            exit 0
+          fi
+
+          git commit -m "Refresh Facebook token"
+
+          for attempt in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin main \
+              && git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 5))
+          done
+
+          echo "Failed to push the refreshed token." >&2
+          exit 1

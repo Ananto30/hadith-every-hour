@@ -1,11 +1,16 @@
-
 name: Post to Facebook
 
 on:
   schedule:
     - cron: "0 */6 * * *"
   workflow_dispatch:
-    
+
+permissions:
+  contents: write
+
+concurrency:
+  group: facebook-post
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -14,13 +19,13 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
-      
+
       - name: setup python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: 3.11
           cache: pip
-      
+
       - name: Install Requirements
         run: pip install -r requirements.txt
 
@@ -28,13 +33,10 @@ jobs:
         run: |
           make fb
         env:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
-          API_KEY: ${{ secrets.API_KEY }}
-          API_SECRET: ${{ secrets.API_SECRET }}
-          FB_APP_ID: ${{ secrets.FB_APP_ID }}
-          FB_APP_SECRET: ${{ secrets.FB_APP_SECRET }}
           FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          # Bootstrap fallback only. The rotated Page token is read from
+          # resources/fb_token.enc, and this secret can be deleted after the
+          # refresh workflow has committed that file.
           FB_PAGE_TOKEN: ${{ secrets.FB_PAGE_TOKEN }}
           TOKEN_ENCRYPTION_KEY: ${{ secrets.TOKEN_ENCRYPTION_KEY }}
 
@@ -42,7 +44,7 @@ jobs:
         run: |
           git config user.name "ananto-bot"
           git config user.email "ananto-bot@bot.ai"
-  
+
       - name: commit changes
         run: |
           chmod +x ./scripts/commit.sh

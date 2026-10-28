@@ -3,3 +3,4 @@ venv
 .env
 .idea
 __pycache__
+resources/*.tmp
