@@ -1,6 +1,6 @@
 <p align="center">
  <h2 align="center">Hadith Every Hour</h2>
- <p align="center">📖 A bot that posts a Hadith every hour on Facebook</p>
+ <p align="center">📖 A bot that posts a Hadith every hour on Facebook & Instagram</p>
  <p align="center"><i>(Every 6 hours for now to avoid spamming)</i></p>
 </p>
 <p align="center">
@@ -9,6 +9,7 @@
 
 
 ## Status
+[![Post to Instagram](https://github.com/Ananto30/hadith-every-hour/actions/workflows/post_to_instagram.yml/badge.svg)](https://github.com/Ananto30/hadith-every-hour/actions/workflows/post_to_instagram.yml)
 [![Post to Facebook](https://github.com/Ananto30/hadith-every-hour/actions/workflows/post_to_facebook.yml/badge.svg)](https://github.com/Ananto30/hadith-every-hour/actions/workflows/post_to_facebook.yml)
 
 Currently posting the Hadiths from Sahih al-Bukhari in serial.
@@ -46,6 +47,16 @@ If you start with a non-expiring Page token, the state is page-only. Adding `FB_
 
 If the user token expires or is revoked, or if `TOKEN_ENCRYPTION_KEY` was changed, set a new `FB_USER_TOKEN` and run the workflow manually with **Replace stored tokens using FB_USER_TOKEN** checked. Force bootstrap overwrites the old state, including when the encryption key changed. Tokens can still be revoked by Meta at any time, so the scheduled workflow acts as a health check as well.
 
+
+## Instagram
+
+`post_to_instagram.yml` renders the Hadith as image cards (`src/hadith_image.py`) and publishes them, as a carousel when there are several. Hadith too long for 3 cards are skipped. Nothing is kept: Instagram needs a public image URL, so the cards are pushed to a throwaway orphan branch (`ig-tmp-*`), Instagram fetches them from `raw.githubusercontent.com`, and the branch is deleted right after publishing. They never touch `main` or its history. This needs the repository to be public.
+
+It uses the Instagram API with Facebook Login and a Business Manager **system-user** token, so no Facebook Page is needed. Setup:
+
+1. In Business Settings, create a system user and assign the Instagram account (and the Meta app) to it.
+2. Generate a token for the system user with `instagram_basic` and `instagram_content_publish`, and save it as the `IG_ACCESS_TOKEN` secret. System-user tokens can be created as never-expiring, so there is no refresh step.
+3. The Instagram account ID is looked up from the token. Set the optional `IG_USER_ID` secret to pin it.
 
 ## Contribution
 Feel free to contribute by creating issues or submitting pull requests. Any improvements, bug fixes, or suggestions for better handling of Hadith posting are welcome.
