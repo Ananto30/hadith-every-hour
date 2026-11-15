@@ -35,3 +35,8 @@ fb:
 refresh-fb-token:
 	@echo "Refreshing Facebook token..."
 	@python -m src.fb_token
+
+.PHONY: ig
+ig:
+	@echo "Posting to Instagram..."
+	@python main.py ig

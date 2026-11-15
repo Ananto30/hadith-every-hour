@@ -1,0 +1,48 @@
+name: Post to Instagram
+
+on:
+  schedule:
+    - cron: "20 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: instagram-post
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      - name: setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+          cache: pip
+
+      - name: Install Requirements
+        run: pip install -r requirements.txt
+
+      - name: Run python script
+        run: |
+          make ig
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          # Pushes and deletes the throwaway branch that hosts the cards
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: setup git config
+        run: |
+          git config user.name "ananto-bot"
+          git config user.email "ananto-bot@bot.ai"
+
+      - name: commit changes
+        run: |
+          chmod +x ./scripts/commit.sh
+          ./scripts/commit.sh

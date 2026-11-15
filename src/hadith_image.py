@@ -1,5 +1,6 @@
 """Render a hadith as a set of calm, readable 4:5 image cards (1080x1350)."""
 
+import io
 import math
 import re
 import sys
@@ -223,15 +224,21 @@ def render_hadith_images(hadith: Hadith) -> list[Image.Image] | None:
     ]
 
 
+def to_jpeg(img: Image.Image) -> bytes:
+    """JPEG, since Instagram's publishing API only accepts JPEG."""
+    buf = io.BytesIO()
+    img.save(buf, format="JPEG", quality=92, optimize=True)
+    return buf.getvalue()
+
+
 def save_images(
     images: list[Image.Image], out_dir: str, stem: str
 ) -> list[str]:
-    """JPEG, since Instagram's publishing API only accepts JPEG."""
     Path(out_dir).mkdir(parents=True, exist_ok=True)
     paths = []
     for i, img in enumerate(images, 1):
         path = f"{out_dir}/{stem}_{i}.jpg"
-        img.save(path, quality=92, optimize=True)
+        Path(path).write_bytes(to_jpeg(img))
         paths.append(path)
     return paths
 
