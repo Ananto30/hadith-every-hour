@@ -1,21 +1,20 @@
 <p align="center">
  <h2 align="center">Hadith Every Hour</h2>
- <p align="center">📖 A bot that posts a Hadith every hour on Twitter & Facebook</p>
+ <p align="center">📖 A bot that posts a Hadith every hour on Facebook</p>
  <p align="center"><i>(Every 6 hours for now to avoid spamming)</i></p>
 </p>
 <p align="center">
-  Follow on Twitter <a href="https://twitter.com/HadithEveryHour">@HadithEveryHour</a> & Facebook <a href="https://www.facebook.com/HadithEveryHour">@HadithEveryHour</a>
+  Follow on Facebook <a href="https://www.facebook.com/HadithEveryHour">@HadithEveryHour</a>
 </p>
 
 
 ## Status
-[![Tweet](https://github.com/Ananto30/hadith-every-hour/actions/workflows/tweet.yml/badge.svg)](https://github.com/Ananto30/hadith-every-hour/actions/workflows/tweet.yml)
 [![Post to Facebook](https://github.com/Ananto30/hadith-every-hour/actions/workflows/post_to_facebook.yml/badge.svg)](https://github.com/Ananto30/hadith-every-hour/actions/workflows/post_to_facebook.yml)
 
 Currently posting the Hadiths from Sahih al-Bukhari in serial.
 
 ## Concept
-It's really simple. GitHub action is written in <a href="/.github/workflows/tweet_hadith.yml">this</a> file. You can notice a scheduler - 
+It's really simple. GitHub action is written in <a href="/.github/workflows/post_to_facebook.yml">this</a> file. You can notice a scheduler - 
 ```
 on:
   schedule:

@@ -26,11 +26,6 @@ mypy-install-types:
 	@echo "Running mypy-stubgen..."
 	@mypy --install-types --non-interactive .
 
-.PHONY: tweet
-tweet:
-	@echo "Tweeting..."
-	@python main.py tweet
-
 .PHONY: fb
 fb:
 	@echo "Posting to Facebook..."
