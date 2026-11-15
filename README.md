@@ -5,6 +5,7 @@
 </p>
 <p align="center">
   Follow on Facebook <a href="https://www.facebook.com/HadithEveryHour">@HadithEveryHour</a>
+  Follow on Instagram <a href="https://www.instagram.com/haditheveryhour/">@haditheveryhour</a>
 </p>
 
 
