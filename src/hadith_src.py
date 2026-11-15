@@ -12,8 +12,8 @@ def query_hadith(
     book: int,
     hadith_no: int,
 ) -> Hadith | None:
-    full_hadith_source = "https://askhadith.com/book"
-    hadith_link = f"{full_hadith_source}?collection_id={collection}&book={book}&ref_no={hadith_no}"
+    # Clean canonical URL; the old /book?... links only 301 to this
+    hadith_link = f"https://www.askhadith.com/hadith/{collection}/{book}/{hadith_no}"
 
     print(f"Querying {hadith_link}")
 
