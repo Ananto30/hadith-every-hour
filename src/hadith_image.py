@@ -20,6 +20,7 @@ LINE_SPACING = 1.55
 
 # Largest size first. The smallest one decides if the hadith is too long.
 BODY_SIZES = (64, 58, 52, 48, 44)
+NARRATOR_SIZES = (36, 32, 28, 24)
 MAX_PAGES = 3
 # Keeps every card airy even when the font is small
 MAX_LINES = 10
@@ -181,13 +182,34 @@ def _center(d, y: int, text: str, font, fill):
     d.text((W / 2, y), text, font=font, fill=fill, anchor="ms")
 
 
+def _narrator_lines(text: str):
+    """Biggest italic size that fits in 2 lines; long names shrink, never clip."""
+    max_width = W - 2 * MARGIN
+    for size in NARRATOR_SIZES:
+        font = _italic(size)
+        lines: list[str] = [""]
+        for word in text.split():
+            trial = f"{lines[-1]} {word}".strip()
+            if lines[-1] and font.getlength(trial) > max_width:
+                lines.append(word)
+            else:
+                lines[-1] = trial
+        if len(lines) <= 2:
+            break
+    return font, size, lines
+
+
 def _render_page(hadith: Hadith, lines, size, index, total) -> Image.Image:
     img = _background()
     d = ImageDraw.Draw(img)
     _ornament(d, 130)
 
     if index == 0 and hadith.narrator_en:
-        _center(d, 205, clean_text(hadith.narrator_en), _italic(36), MUTED)
+        font, nsize, nlines = _narrator_lines(clean_text(hadith.narrator_en))
+        # Start higher when wrapped so the 2nd line stays clear of the body
+        y = 205 if len(nlines) == 1 else 195
+        for i, nline in enumerate(nlines):
+            _center(d, round(y + i * nsize * 1.3), nline, font, MUTED)
 
     lines = list(lines)
     if index > 0:
