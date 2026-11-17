@@ -38,14 +38,22 @@ def get_page_token() -> str:
     can be deleted after the refresh workflow has committed the state file.
     """
     state = load_state()
-    if state is not None:
-        return state.page_token
-
-    token = get_optional_env_var("FB_PAGE_TOKEN")
+    token = (
+        state.page_token
+        if state is not None
+        else get_optional_env_var("FB_PAGE_TOKEN")
+    )
+    token = token.strip() if token else ""
     if not token:
         raise ValueError(
             "No Facebook Page token available. Run the Refresh Facebook "
             "token workflow, or set the FB_PAGE_TOKEN secret."
+        )
+    if any(char.isspace() for char in token):
+        raise ValueError(
+            "Facebook Page token contains embedded whitespace. Replace "
+            "FB_PAGE_TOKEN, or re-bootstrap the stored token using "
+            "FB_USER_TOKEN in the Refresh Facebook token workflow."
         )
     return token
 

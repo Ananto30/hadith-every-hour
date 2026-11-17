@@ -48,6 +48,8 @@ If you start with a non-expiring Page token, the state is page-only. Adding `FB_
 
 If the user token expires or is revoked, or if `TOKEN_ENCRYPTION_KEY` was changed, set a new `FB_USER_TOKEN` and run the workflow manually with **Replace stored tokens using FB_USER_TOKEN** checked. Force bootstrap overwrites the old state, including when the encryption key changed. Tokens can still be revoked by Meta at any time, so the scheduled workflow acts as a health check as well.
 
+Facebook posting trims surrounding whitespace from both stored Page tokens and the `FB_PAGE_TOKEN` fallback. Tokens with embedded whitespace are rejected without printing the token. If this happens, copy the token again as a single line; for stored tokens, set a clean `FB_USER_TOKEN` and force bootstrap as described above.
+
 
 ## Instagram
 
