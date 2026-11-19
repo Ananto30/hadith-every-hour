@@ -4,8 +4,31 @@ from unittest.mock import Mock, patch
 
 import requests
 
-from src.facebook_page import get_page_token, post_on_facebook_page
+from src.facebook_page import format_post, get_page_token, post_on_facebook_page
 from src.fb_token import TokenState
+
+
+class FacebookPostFormattingTests(unittest.TestCase):
+    def test_format_post_keeps_hadith_url_readable(self):
+        url = "https://www.askhadith.com/hadith/bukhari/19/29"
+
+        message = format_post(
+            Mock(
+                hadith_link=url,
+                narrator_en="",
+                body_en="",
+                collection="",
+                book_no="",
+                book_ref_no="",
+                hadith_no="",
+                book_en="",
+                chapter_no="",
+                chapter_en="",
+            )
+        )
+
+        self.assertIn(f"Link: {url}", message)
+        self.assertNotIn("https%3A%2F%2F", message)
 
 
 class FacebookPageTokenTests(unittest.TestCase):

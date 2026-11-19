@@ -1,5 +1,3 @@
-import urllib.parse
-
 import requests
 
 from src.fb_token import load_state
@@ -8,11 +6,7 @@ from src.utils import ensure_env_var, get_optional_env_var
 
 
 def format_post(hadith: Hadith) -> str:
-    link = (
-        urllib.parse.quote_plus(hadith.hadith_link)
-        if hadith.hadith_link
-        else ""
-    )
+    link = hadith.hadith_link or ""
     reference = (
         f"{hadith.collection} (Book {hadith.book_no}, "
         f"Hadith {hadith.book_ref_no} [Reference {hadith.hadith_no}])"
